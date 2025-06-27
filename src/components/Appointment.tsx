@@ -75,6 +75,19 @@ const handleCreateAppointment = async () => {
       await addDoc(collection(db, "appointments"), appointment); // ✅ Save to Firestore
       console.log("Appointment saved to Firebase:", appointment);
       alert("Appointment successfully scheduled!");
+const formattedDate = format(date, "PPP");
+      const message = `Hello ${patientName}, your appointment with ${doctorName} is scheduled on ${formattedDate} at ${time}.`;
+
+      await fetch("https://twilio-back.onrender.com/send-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: `+91${phone}`,
+          message,
+        }),
+      });
 
       setIsOpen(false);
       setNewAppointment({});
